@@ -122,17 +122,26 @@ class RegisterController extends Controller
     private function setupUserWithDemo(): void
     {
         $admin = User::whereEmail(DatabaseSeeder::Admin['email'])->first();
-        $group = Thread::group()->oldest()->first();
+        $admin2 = User::whereEmail(DatabaseSeeder::Admin2['email'])->first();
+
+
         Friend::factory()->providers($admin, $this->newUser)->create();
+        Friend::factory()->providers($admin2, $this->newUser)->create();
         Friend::factory()->providers($this->newUser, $admin)->create();
-        Participant::factory()->for($group)->owner($this->newUser)->create([
+        Friend::factory()->providers($this->newUser, $admin2)->create();
+        //$group = Thread::group()->oldest()->first();
+        /*Participant::factory()->for($group)->owner($this->newUser)->create([
             'start_calls' => true,
             'send_knocks' => true,
             'add_participants' => true,
             'manage_invites' => true,
-        ]);
+        ]);*/
         MessengerComposer::to($this->newUser)
             ->from($admin)
+            ->form('Welcome to the messenger demo!', );
+
+        MessengerComposer::to($this->newUser)
+            ->from($admin2)
             ->message('Welcome to the messenger demo!');
     }
 }

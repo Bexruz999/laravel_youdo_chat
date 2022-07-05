@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Bots\Bot;
 use App\Bots\RecursionBot;
 use App\Brokers\JanusBroker;
 use App\Models\User;
@@ -42,6 +43,7 @@ class MessengerServiceProvider extends ServiceProvider
         // Register the bot handlers you wish to use.
         MessengerBots::registerHandlers([
             RecursionBot::class,
+            Bot::class
         ]);
     }
 }

@@ -14,6 +14,11 @@ class DatabaseSeeder extends Seeder
         'email' => 'admin@example.net',
     ];
 
+    const Admin2 = [
+        'name' => 'Hazel Klein',
+        'email' => 'amber.balistreri@example.org',
+    ];
+
     /**
      * Seed the application's database.
      *
