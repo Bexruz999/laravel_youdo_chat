@@ -123,8 +123,6 @@ class RegisterController extends Controller
     {
         $admin = User::whereEmail(DatabaseSeeder::Admin['email'])->first();
         $admin2 = User::whereEmail(DatabaseSeeder::Admin2['email'])->first();
-
-
         Friend::factory()->providers($admin, $this->newUser)->create();
         Friend::factory()->providers($admin2, $this->newUser)->create();
         Friend::factory()->providers($this->newUser, $admin)->create();
@@ -136,9 +134,31 @@ class RegisterController extends Controller
             'add_participants' => true,
             'manage_invites' => true,
         ]);*/
+
         MessengerComposer::to($this->newUser)
             ->from($admin)
-            ->form('Welcome to the messenger demo!', );
+            ->form('<div style="width: 350px" class="col-12 align-items-center p-0">
+                    <form id="registeration_form" method="POST" action="">
+                        <div class="mb-3">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="name" class="form-control" id="formGroupExampleInput" placeholder="name">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="email" class="form-control" id="formGroupExampleInput2" placeholder="email">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="phone" class="form-control" id="formGroupExampleInput3" placeholder="phone number">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control" id="formGroupExampleInput4" placeholder="password">
+                        </div><div class="mb-3">
+                        <input type="password" name="password" class="form-control" id="formGroupExampleInput5" placeholder="password">
+                        </div>
+                        <button id="registeration_btn" class="btn btn-primary w-100" type="submit">Submit</button>
+                      </form>
+                    </div>');
 
         MessengerComposer::to($this->newUser)
             ->from($admin2)

@@ -27,6 +27,7 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/registration', [RegisterController::class, 'registration']);
 Route::post('register', [RegisterController::class, 'register']);
 Route::prefix('api-explorer')->name('api-explorer.')->group(function () {
     Route::view('/', 'explorer.index')->name('index');

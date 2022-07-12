@@ -3107,7 +3107,7 @@ window.Messenger = function () {
     mobile: false,
     teapot: 0,
     modal_close: null,
-    dark_mode: true,
+    dark_mode: false,
     css: {
       base: null,
       dark: null
@@ -6289,7 +6289,7 @@ window.ThreadManager = function () {
       if (opt.thread.type === 7) {
         var _focus_input = document.getElementById('messenger_search_profiles');
 
-        Messenger.format().focusEnd(_focus_input);
+        Messenger.format();
         return;
       }
 
@@ -6302,12 +6302,12 @@ window.ThreadManager = function () {
           var elm_class = $(e.target).attr('class');
           var ignore = ['message-text', 'message-text pt-2', 'fas fa-trash', 'fas fa-grin', 'dropdown-item', 'fas fa-ellipsis-v', 'fas fa-grin-tongue', 'fas fa-reply', 'fas fa-pen', 'joypixels', 'ml-1 font-weight-bold text-primary', 'badge badge-light mr-1 px-1 pointer_area', 'reacted-by-me badge badge-light mr-1 px-1 pointer_area'];
           if (ignore.includes(elm_class) || Messenger.common().mobile) return;
-          Messenger.format().focusEnd(focus_input);
+          Messenger.format();
           break;
 
         case 3:
           if (!opt.thread.messaging) return;
-          Messenger.format().focusEnd(focus_input);
+          Messenger.format();
           break;
 
         case 4:
@@ -8003,7 +8003,7 @@ window.ThreadManager = function () {
         opt.elements.reply_message_alert.html(ThreadTemplates.render().thread_replying_message_alert(opt.storage.messages[i]));
         opt.thread.replying = true;
         opt.thread.reply_to_id = arg.id;
-        Messenger.format().focusEnd(focus_input);
+        Messenger.format();
       }
     },
     resetReplying: function resetReplying() {
@@ -9487,7 +9487,7 @@ window.EmojiPicker = function () {
       }
 
       opt.messageTextElm = document.getElementById('message_text_input');
-      opt.messagePicker.showPicker(opt.messageTextElm);
+      /*opt.messagePicker.showPicker(opt.messageTextElm);*/
     },
     editMessage: function editMessage() {
       if (opt.editPicker === null) {
@@ -11148,8 +11148,8 @@ window.ThreadTemplates = function () {
           case 4:
             return '<em>' + data.resources.latest_message.owner.name + '</em> : <i class="fas fa-video"></i> Sent a video';
 
-          case 4:
-            return '<em>' + data.resources.latest_message.owner.name + '</em> : <i class="fas fa-video"></i> Sent a video';
+          case 5:
+            return '';
 
           default:
             return '<em>' + data.resources.latest_message.owner.name + '</em> : ' + Messenger.format().shortcodeToImage(data.resources.latest_message.body);
@@ -11353,9 +11353,7 @@ window.ThreadTemplates = function () {
           case 4:
             return '<div class="h3 spinner-grow text-danger" style="width: 4rem; height: 4rem;" role="status">\n' + '  <span class="sr-only">Uploading...</span>\n' + '</div>';
 
-          case 5:
           default:
-            console.log(data);
             return Messenger.format().shortcodeToImage(data.body);
         }
       }
@@ -11372,7 +11370,10 @@ window.ThreadTemplates = function () {
             return nolink === true ? '<i class="fas fa-music"></i> ' + data.body : '<a href="' + data.audio + '" target="_blank"><i class="fas fa-music"></i> ' + data.body + '</a>';
 
           case 4:
-            return nolink === true ? 'bla bla' : 'vla vla';
+            return nolink === true ? '<i class="fas fa-video"></i> ' + data.body : '<a href="' + data.video + '" target="_blank"><i class="fas fa-video"></i> ' + data.body + '</a>';
+
+          case 5:
+            return '';
 
           default:
             return methods.format_message_body(data.body, true);
@@ -11399,8 +11400,51 @@ window.ThreadTemplates = function () {
           var video = '<div class="embed-responsive embed-responsive-16by9 my-2"><video class="embed-responsive-item" controls preload="metadata"><source src="' + data.video + '?stream=true"></video></div>';
           return '<a href="' + data.video + '" target="_blank"><i class="fas fa-video"></i> ' + data.body + '</a><hr>' + video;
 
-        case 5:
-          return 'buyerda forma buladi';
+          case 5:
+          let temp = document.createElement('div');
+          temp.innerHTML = data.body;
+          let html = temp.firstChild;
+            return html.textContent;
+          /*var token = methods.format_message_body(data.body);
+          return '<div style="width: 350px" class="col-12 align-items-center p-0">\n' + '        <form id="registeration_form" method="POST" action="">\n' + '            <div class="mb-3">\n' + '               <input type="hidden" name="_token" value="' + token + '">' + '            </div>\n' + '            <div class="mb-3">\n' + '               <input type="text" name="name" class="form-control" id="formGroupExampleInput" placeholder="name">\n' + '            </div>\n' + '            <div class="mb-3">\n' + '               <input type="text" name="email" class="form-control" id="formGroupExampleInput2" placeholder="email">\n' + '            </div>\n' + '            <div class="mb-3">\n' + '                <input type="text" name="phone" class="form-control" id="formGroupExampleInput3" placeholder="phone number">\n' + '            </div>\n' + '            <div class="mb-3">\n' + '               <input type="password" name="password" class="form-control" id="formGroupExampleInput4" placeholder="password">\n' + '            </div>\n' + '            <div class="mb-3">\n' + '               <input type="password" name="password" class="form-control" id="formGroupExampleInput5" placeholder="password">\n' + '            </div>\n' + '            <button id="registeration_btn" class="btn btn-primary w-100" type="submit">Submit</button>\n' + '        </form>\n' + '    </div>';*/
+
+        /*let token = methods.format_message_body(data.body);
+        $('#registeration_form').submit(function (e) {
+            e.preventDefault();
+            let th = $(this);
+            let mess = '<div style="width: 350px" class="col-12 align-items-center p-0">\n' +
+                '        <form id="registeration_form" method="POST" action="">\n' +
+                 '            <div class="mb-3">\n' +
+                '            <input type="hidden" name="_token" value="' + token +'">' +
+                '            </div>\n' +
+                '            <div class="mb-3">\n' +
+                '                <input type="text" name="name" class="form-control" id="formGroupExampleInput" placeholder="name">\n' +
+                '            </div>\n' +
+                '            <div class="mb-3">\n' +
+                '                <input type="text" name="email" class="form-control" id="formGroupExampleInput2" placeholder="email">\n' +
+                '            </div>\n' +
+                '            <div class="mb-3">\n' +
+                '                <input type="text" name="phone" class="form-control" id="formGroupExampleInput3" placeholder="phone number">\n' +
+                '            </div>\n' +
+                '            <div class="mb-3">\n' +
+                '                <input type="password" name="password" class="form-control" id="formGroupExampleInput4" placeholder="password">\n' +
+                '            </div>\n' +
+                '            <div class="mb-3">\n' +
+                '                <input type="password" name="password" class="form-control" id="formGroupExampleInput5" placeholder="password">\n' +
+                '            </div>\n' +
+                '            <button id="registeration_btn" class="btn btn-primary w-100" type="submit">Submit</button>\n' +
+                '        </form>\n' +
+                '    </div>';
+                let btn = th.find('#registeration_btn');
+                 $.ajax({
+                   url: document.location.origin + '/registration',
+                   type: 'POST',
+                   data: th.serialize(),
+                   success: function () {
+                       th.addClass('d-none');
+                   }
+                });
+        })*/
 
         default:
           var body = methods.format_message_body(data.body);
@@ -11537,7 +11581,7 @@ window.ThreadTemplates = function () {
       return '<div id="loading_history_marker" class="system-message pt-0 mt-n4 w-100 text-center"> ' + '<span class="text-primary spinner-grow spinner-grow-sm"></span></div>';
     },
     end_of_history: function end_of_history(created_at) {
-      return '';
+      return '<div title="Conversation started on ' + Messenger.format().makeHumanTime(created_at) + '"' + ' id="end_history_marker" class="alert-dark shadow-sm rounded mb-4 mt-n3 w-100 text-center text-dark"> ' + '<strong><i class="fas fa-comments"></i> Start of conversation</div>';
     },
     system_message: function system_message(data, modal) {
       var icon = 'fas fa-info-circle',
